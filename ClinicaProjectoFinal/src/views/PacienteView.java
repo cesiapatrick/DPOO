@@ -1,6 +1,8 @@
 package views;
 
 import javax.swing.*;
+
+import controllers.HospitalData;
 import controllers.PacienteController;
 import controllers.ViviendaController;
 import models.Paciente;
@@ -11,18 +13,23 @@ import java.awt.event.ActionListener;
 
 public class PacienteView extends JFrame {
     private JTextField txtNombre;
+    private JTextField txtApellido;//
     private JTextField txtEdad;
-    private JTextField txtDNI;
+    private JTextField txtVivienda;//
+    private JTextField txtId;
     private JTextField txtCedula;
     private JComboBox<String> comboTipoSangre;
     private JComboBox<String> comboGenero;
-    private JComboBox<Vivienda> comboViviendas;
-    private PacienteController pacienteController;
-    private ViviendaController viviendaController;
+    //private JComboBox<Vivienda> comboViviendas;
+    //private PacienteController pacienteController;
+    //private ViviendaController viviendaController;
+    private HospitalData hospitalData = HospitalData.getInstance();
+    private int idPaciente = hospitalData.getIdPacientes();
+    private Vivienda vivienda;
 
     public PacienteView() {
-        pacienteController = new PacienteController();
-        viviendaController = new ViviendaController();
+        //pacienteController = new PacienteController();
+        //viviendaController = new ViviendaController();
         setTitle("✨ Registro de Pacientes ✨");
         setSize(900, 700);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -116,33 +123,57 @@ public class PacienteView extends JFrame {
         Color labelColor = new Color(41, 84, 144);
 
         // Componentes del formulario con iconos
-        addFormField(formPanel, "👤 Nombre:", txtNombre = new JTextField(), 30, labelFont, labelColor);
-        addFormField(formPanel, "📅 Edad:", txtEdad = new JTextField(), 90, labelFont, labelColor);
-        addFormField(formPanel, "🆔 DNI:", txtDNI = new JTextField(), 150, labelFont, labelColor);
-        addFormField(formPanel, "📝 Cédula:", txtCedula = new JTextField(), 210, labelFont, labelColor);
+        addFormField(formPanel, "ID:", txtId = new JTextField(String.valueOf(idPaciente)), 10, labelFont, labelColor);
+        addFormField(formPanel, "Cédula:", txtCedula = new JTextField(), 75, labelFont, labelColor);
+        addFormField(formPanel, "Nombre:", txtNombre = new JTextField(), 120, labelFont, labelColor);
+        addFormField(formPanel, "Apellido:", txtApellido = new JTextField(), 170, labelFont, labelColor);
+        addFormField(formPanel, "Edad:", txtEdad = new JTextField(), 220, labelFont, labelColor);
+        addFormField(formPanel, "Vivienda:", txtVivienda = new JTextField(), 370, labelFont, labelColor);
+        
 
         // Combos
-        addComboField(formPanel, "💉 Tipo de Sangre:", 
+        addComboField(formPanel, "Tipo de Sangre:", 
             comboTipoSangre = new JComboBox<>(new String[]{"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"}), 
             270, labelFont, labelColor);
 
-        addComboField(formPanel, "⚧ Género:", 
+        addComboField(formPanel, "Género:", 
             comboGenero = new JComboBox<>(new String[]{"Masculino", "Femenino", "Otro"}), 
-            330, labelFont, labelColor);
+            320, labelFont, labelColor);
+        
+        
+        //Boton Registrar Vivienda
+        JButton btnRegistrarVivienda = new JButton("Registrar");
+        styleButton(btnRegistrarVivienda);
+        btnRegistrarVivienda.setBounds(380, 370, 95, 35);
 
-        addComboField(formPanel, "🏠 Vivienda:", 
-            comboViviendas = new JComboBox<>(), 
-            390, labelFont, labelColor);
-
+        btnRegistrarVivienda.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                ViviendaView viviendaView = new ViviendaView(new ViviendaView.ViviendaAddedListener() {
+                    @Override
+                    public void onViviendaAdded(Vivienda viviendaReg) {
+                        vivienda = viviendaReg;
+                        txtVivienda.setText(vivienda.getTipo()+" - "+vivienda.getCiudad());
+                    }
+                });
+                //Mostrar la ventana de viviendas
+                viviendaView.setVisible(true); 
+            }
+        });
+        formPanel.add(btnRegistrarVivienda);
+        
+        /*
         // Poblar combo de viviendas
         for (Vivienda vivienda : viviendaController.listarViviendas()) {
             comboViviendas.addItem(vivienda);
         }
+        */
 
         // Botón de registro
-        JButton btnRegistrar = new JButton("📋 Registrar Paciente");
+        JButton btnRegistrar = new JButton("Registrar Paciente");
         styleButton(btnRegistrar);
-        btnRegistrar.setBounds(100, 470, 280, 40);
+        btnRegistrar.setBounds(100, 480, 280, 40);
         formPanel.add(btnRegistrar);
 
         mainPanel.add(formPanel);
@@ -161,29 +192,37 @@ public class PacienteView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    String nombre = txtNombre.getText();
-                    int edad = Integer.parseInt(txtEdad.getText());
-                    String dni = txtDNI.getText();
+                	//String id = txtId.getText();
                     String cedula = txtCedula.getText();
+                    String nombre = txtNombre.getText();
+                    String apellido = txtApellido.getText();
                     String tipoSangre = (String) comboTipoSangre.getSelectedItem();
                     String genero = (String) comboGenero.getSelectedItem();
-                    Vivienda vivienda = (Vivienda) comboViviendas.getSelectedItem();
+                    //Vivienda vivienda = (Vivienda) comboViviendas.getSelectedItem();
+                    if (cedula.isEmpty() || nombre.isEmpty() || apellido.isEmpty() || tipoSangre.isEmpty() || genero.isEmpty() || vivienda == null) {
+                        JOptionPane.showMessageDialog(null, "❌ Por favor complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    if (!esNumero(cedula)) {
+                    	 JOptionPane.showMessageDialog(null, "❌ Por favor ingrese un valor numérico válido para la Cédula.", "Error", JOptionPane.ERROR_MESSAGE);
+                    	 txtCedula.setText("");
+                    	 return;
+                    }
+                    int edad = Integer.parseInt(txtEdad.getText());
 
-                    pacienteController.registrarPaciente(
-                        new Paciente(nombre, edad, dni, tipoSangre, genero, cedula, vivienda)
-                    );
+                    //Crear y Guardar Paciente
+                    Paciente paciente = new Paciente(idPaciente, cedula, nombre, apellido, edad, tipoSangre, genero, vivienda);
+                    hospitalData.addPaciente(paciente);
+                    
                     JOptionPane.showMessageDialog(null, "✅ Paciente registrado exitosamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
-                    // Limpiar campos
-                    txtNombre.setText("");
-                    txtEdad.setText("");
-                    txtDNI.setText("");
-                    txtCedula.setText("");
-                    comboTipoSangre.setSelectedIndex(0);
-                    comboGenero.setSelectedIndex(0);
+                    
+                    limpiarCampos();
+                    dispose();
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "❌ Por favor ingrese un valor numérico válido para la edad.", 
                         "Error", JOptionPane.ERROR_MESSAGE);
+                    txtEdad.setText("");
+                    return;
                 }
             }
         });
@@ -195,10 +234,21 @@ public class PacienteView extends JFrame {
         styleLabel(label, labelFont, labelColor);
         label.setBounds(30, y, 120, 30);
         panel.add(label);
-
         styleTextField(textField);
-        textField.setBounds(150, y, 280, 35);
-        panel.add(textField);
+        if (labelText.equals("ID:")) {
+            textField.setHorizontalAlignment(JTextField.CENTER);
+            textField.setCaretColor(new Color(0, 0, 0, 0));       
+            textField.setFocusable(false);                        
+            textField.setFont(new Font("Segoe UI", Font.BOLD, 14));
+            textField.setEditable(false);
+        } 
+        if (labelText.equals("Vivienda:")) {
+        	textField.setBounds(150, y, 230, 35);
+        	panel.add(textField);
+        } else {
+        	textField.setBounds(150, y, 280, 35);
+            panel.add(textField);
+        }
     }
 
     private void addComboField(JPanel panel, String labelText, JComboBox<?> comboBox, 
@@ -250,5 +300,24 @@ public class PacienteView extends JFrame {
                 button.setBackground(new Color(30, 144, 255));
             }
         });
+    }
+    
+    private void limpiarCampos() {
+    	txtCedula.setText("");
+    	txtNombre.setText("");
+    	txtApellido.setText("");
+    	txtEdad.setText("");
+        comboTipoSangre.setSelectedIndex(0);
+        comboGenero.setSelectedIndex(0);
+    }
+    
+    public static boolean esNumero(String str) {
+        if (str == null || str.isEmpty()) return false;
+        try {
+            Integer.parseInt(str); 
+            return true; 
+        } catch (NumberFormatException e) {
+            return false;  
+        }
     }
 }

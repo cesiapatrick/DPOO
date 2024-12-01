@@ -2,23 +2,39 @@ package views;
 
 import javax.swing.*;
 import controllers.DoctorController;
+import controllers.HospitalData;
+import models.Paciente;
+import models.Usuario;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.nio.file.FileSystemNotFoundException;
 
 public class AdminLoginView extends JFrame {
     private JTextField txtUsername;
     private JPasswordField txtPassword;
-    private JTextField txtNombre;
-    private JTextField txtApellido;
-    private JTextField txtEspecialidad;
+    //private JTextField txtNombre;
+    //private JTextField txtApellido;
+    //private JTextField txtEspecialidad;
     private JComboBox<String> comboRol;
-    private DoctorController doctorController;
+    //private DoctorController doctorController;
+    private HospitalData hospitalData = HospitalData.getInstance();
     private static final String ADMIN_USERNAME = "admin";
     private static final String ADMIN_PASSWORD = "admin123";
-
+    
     public AdminLoginView() {
-        doctorController = new DoctorController();
+    	
+    	//Cargar datos Archivo
+    	hospitalData.cargarDatosArchivo();
+
+
         setTitle(" Sistema de Acceso Médico ");
         setSize(900, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -116,14 +132,18 @@ public class AdminLoginView extends JFrame {
         lblRol.setBounds(30, 150, 120, 30);
         formPanel.add(lblRol);
 
-        comboRol = new JComboBox<>(new String[]{"Doctor", "Administrador"});
+        comboRol = new JComboBox();
+        comboRol.addItem("Doctor");
+        comboRol.addItem("Administrador");
         styleComboBox(comboRol);
         comboRol.setBounds(150, 150, 280, 35);
         formPanel.add(comboRol);
-
+        
+        /*
         addFormField(formPanel, " Nombre:", txtNombre = new JTextField(), 210);
         addFormField(formPanel, " Apellido:", txtApellido = new JTextField(), 270);
         addFormField(formPanel, " Especialidad:", txtEspecialidad = new JTextField(), 330);
+        */
 
         
         JButton btnLogin = new JButton(" Iniciar Sesión");
@@ -158,17 +178,17 @@ public class AdminLoginView extends JFrame {
                 if (comboRol.getSelectedItem().equals("Administrador")) {
                     if (username.equals(ADMIN_USERNAME) && password.equals(ADMIN_PASSWORD)) {
                         JOptionPane.showMessageDialog(null, " Inicio de sesión de administrador exitoso");
-                        dispose();
                         new MainView().setVisible(true);
+                        dispose();
                     } else {
                         JOptionPane.showMessageDialog(null, " Credenciales de administrador incorrectas", 
                             "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
-                    if (doctorController.autenticarDoctor(username, password)) {
+                    if (hospitalData.autenticarInicioSesion(username, password)) {
                         JOptionPane.showMessageDialog(null, " Inicio de sesión de doctor exitoso");
-                        dispose();
                         new MainView().setVisible(true);
+                        dispose();
                     } else {
                         JOptionPane.showMessageDialog(null, " Credenciales de doctor incorrectas", 
                             "Error", JOptionPane.ERROR_MESSAGE);
@@ -184,34 +204,48 @@ public class AdminLoginView extends JFrame {
                 String password = new String(txtPassword.getPassword());
 
                 if (comboRol.getSelectedItem().equals("Doctor")) {
-                    String nombre = txtNombre.getText();
-                    String apellido = txtApellido.getText();
-                    String especialidad = txtEspecialidad.getText();
-
-                    if (username.isEmpty() || password.isEmpty() || nombre.isEmpty() || 
-                        apellido.isEmpty() || especialidad.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, " Por favor complete todos los campos.", 
+                    if (username.isEmpty() || password.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Por favor complete todos los campos.", 
                             "Error", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
 
-                    if (doctorController.registrarDoctor(username, password, nombre, apellido, especialidad)) {
-                        JOptionPane.showMessageDialog(null, " Doctor registrado exitosamente");
+                    if (hospitalData.autenticarRegistro(username)) {
+                        JOptionPane.showMessageDialog(null, "Doctor registrado exitosamente");
+                        Usuario usuarioDoctor = new Usuario(username, password, comboRol.getSelectedItem().toString());
+                        hospitalData.addUsuario(usuarioDoctor);
+               
+                        new MainView().setVisible(true);
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "El usuario ya existe", 
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                        limpiarCampos();
+                    }
+                }  else {
+                    JOptionPane.showMessageDialog(null, "Solo el administrador puede registrar a otros administradores.", 
+                        "Aviso", JOptionPane.WARNING_MESSAGE);
+
+                    if (username.isEmpty() || password.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Por favor complete todos los campos.", 
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    if (hospitalData.autenticarRegistro(username)) {
+                        JOptionPane.showMessageDialog(null, "Doctor registrado exitosamente");
                         limpiarCampos();
                     } else {
-                        JOptionPane.showMessageDialog(null, " El usuario ya existe", 
+                        JOptionPane.showMessageDialog(null, "El usuario ya existe", 
                             "Error", JOptionPane.ERROR_MESSAGE);
                     }
-                } else {
-                    JOptionPane.showMessageDialog(null, " Solo el administrador puede registrar a otros administradores.", 
-                        "Aviso", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
 
-        
-        
         comboRol.setSelectedItem("Doctor");
+
+
     }
 
     private void addFormField(JPanel panel, String labelText, JTextField field, int y) {
@@ -268,8 +302,8 @@ public class AdminLoginView extends JFrame {
     private void limpiarCampos() {
         txtUsername.setText("");
         txtPassword.setText("");
-        txtNombre.setText("");
-        txtApellido.setText("");
-        txtEspecialidad.setText("");
+        //txtNombre.setText("");
+        //txtApellido.setText("");
+        //txtEspecialidad.setText("");
     }
 }

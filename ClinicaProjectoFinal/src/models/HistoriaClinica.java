@@ -1,8 +1,11 @@
 package models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class HistoriaClinica {
+public class HistoriaClinica implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
     private Paciente paciente;
     private ArrayList<ConsultaMedica> consultas;
 

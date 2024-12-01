@@ -11,9 +11,15 @@ public class ViviendaView extends JFrame {
     private JTextField txtDireccion;
     private JTextField txtCiudad;
     private JTextField txtCodigoPostal;
+    private JComboBox<String> comboTipo;
     private ViviendaController viviendaController;
+    
+    private ViviendaAddedListener viviendaAddedListener;
+    private Vivienda vivienda;
+    
 
-    public ViviendaView() {
+    public ViviendaView(ViviendaAddedListener listener) {
+    	this.viviendaAddedListener = listener;
         viviendaController = new ViviendaController();
         setTitle(" Registro de Viviendas ");
         setSize(900, 700);
@@ -110,31 +116,31 @@ public class ViviendaView extends JFrame {
         // Componentes del formulario
         JLabel lblDireccion = new JLabel(" Dirección:");
         styleLabel(lblDireccion, labelFont, labelColor);
-        lblDireccion.setBounds(30, 30, 120, 30);
+        lblDireccion.setBounds(30, 40, 120, 30);
 
         txtDireccion = new JTextField();
         styleTextField(txtDireccion);
-        txtDireccion.setBounds(150, 30, 280, 35);
+        txtDireccion.setBounds(170, 40, 280, 35);
 
         JLabel lblCiudad = new JLabel(" Ciudad:");
         styleLabel(lblCiudad, labelFont, labelColor);
-        lblCiudad.setBounds(30, 90, 120, 30);
+        lblCiudad.setBounds(30, 120, 200, 30);
 
         txtCiudad = new JTextField();
         styleTextField(txtCiudad);
-        txtCiudad.setBounds(150, 90, 280, 35);
+        txtCiudad.setBounds(170, 120, 280, 35);
 
         JLabel lblCodigoPostal = new JLabel(" Código Postal:");
         styleLabel(lblCodigoPostal, labelFont, labelColor);
-        lblCodigoPostal.setBounds(30, 150, 120, 30);
+        lblCodigoPostal.setBounds(30, 200, 120, 30);
 
         txtCodigoPostal = new JTextField();
         styleTextField(txtCodigoPostal);
-        txtCodigoPostal.setBounds(150, 150, 280, 35);
+        txtCodigoPostal.setBounds(170, 200, 280, 35);
 
         JButton btnRegistrar = new JButton(" Registrar Vivienda");
         styleButton(btnRegistrar);
-        btnRegistrar.setBounds(100, 220, 280, 40);
+        btnRegistrar.setBounds(100, 430, 280, 40);
 
         // Agregar componentes al panel de formulario
         formPanel.add(lblDireccion);
@@ -146,6 +152,13 @@ public class ViviendaView extends JFrame {
         formPanel.add(btnRegistrar);
 
         mainPanel.add(formPanel);
+        
+        // Combobox Tipo Vivienda        
+        addComboField(formPanel, "Tipo de Vivienda:", 
+                comboTipo = new JComboBox<>(new String[]{"Casa", "Departamento", "Otro"}), 
+                280, labelFont, labelColor);
+
+ 
 
         // Footer decorativo
         JLabel footerLabel = new JLabel("© 2024 Sistema de Registro de Viviendas");
@@ -158,17 +171,32 @@ public class ViviendaView extends JFrame {
         setLocationRelativeTo(null);
 
         btnRegistrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String direccion = txtDireccion.getText();
-                String ciudad = txtCiudad.getText();
-                String codigoPostal = txtCodigoPostal.getText();
-                viviendaController.registrarVivienda(new Vivienda(direccion, ciudad, codigoPostal));
-                JOptionPane.showMessageDialog(null, "✅ Vivienda registrada exitosamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                txtDireccion.setText("");
-                txtCiudad.setText("");
-                txtCodigoPostal.setText("");
-            }
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+
+        		String direccion = txtDireccion.getText();
+        		String ciudad = txtCiudad.getText();
+        		String tipo = (String) comboTipo.getSelectedItem();
+        		String codigoPostal = txtCodigoPostal.getText();
+        		
+        		if (direccion.isEmpty() || ciudad.isEmpty() || tipo.isEmpty() || codigoPostal.isEmpty()) {
+        			JOptionPane.showMessageDialog(null, "❌ Por favor complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+        			return;
+        		}
+        		if (!esNumero(codigoPostal)) {
+        			JOptionPane.showMessageDialog(null, "❌ Por favor ingrese un valor numérico válido para el Código Postal.", "Error", JOptionPane.ERROR_MESSAGE);
+        			txtCodigoPostal.setText("");
+        			return;
+        		}
+        		
+        		vivienda = new Vivienda(direccion, ciudad, tipo, codigoPostal);
+        		JOptionPane.showMessageDialog(null, "✅ Vivienda registrada exitosamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        		//Pasar Vivienda a PacienteView
+        		if (viviendaAddedListener != null) {
+        			viviendaAddedListener.onViviendaAdded(vivienda);
+        		}
+        		dispose();  
+        	}
         });
     }
 
@@ -204,5 +232,36 @@ public class ViviendaView extends JFrame {
                 button.setBackground(new Color(30, 144, 255));
             }
         });
+    }
+    
+    public interface ViviendaAddedListener {
+        void onViviendaAdded(Vivienda vivienda);
+    }
+    
+    private void addComboField(JPanel panel, String labelText, JComboBox<?> comboBox, 
+            int y, Font labelFont, Color labelColor) {
+        JLabel label = new JLabel(labelText);
+        styleLabel(label, labelFont, labelColor);
+        label.setBounds(30, y, 120, 35);
+        panel.add(label);
+        styleComboBox(comboBox);
+        comboBox.setBounds(170, y, 280, 35);
+        panel.add(comboBox);
+    }
+    
+    private void styleComboBox(JComboBox<?> comboBox) {
+        comboBox.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        comboBox.setBackground(new Color(240, 248, 255));
+        comboBox.setBorder(BorderFactory.createLineBorder(new Color(135, 206, 250), 2));
+    }
+    
+    public static boolean esNumero(String str) {
+        if (str == null || str.isEmpty()) return false;
+        try {
+            Integer.parseInt(str); 
+            return true; 
+        } catch (NumberFormatException e) {
+            return false;  
+        }
     }
 }

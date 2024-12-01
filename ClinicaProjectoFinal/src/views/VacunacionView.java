@@ -2,6 +2,7 @@ package views;
 
 import javax.swing.*;
 import controllers.VacunacionController;
+import controllers.HospitalData;
 import controllers.PacienteController;
 import models.Vacunacion;
 import models.Paciente;
@@ -13,15 +14,19 @@ import java.awt.event.KeyEvent;
 
 public class VacunacionView extends JFrame {
     private JTextField txtVacuna;
-    private JTextField searchBar;
+    private int idPaciente;
+    private JTextField txtPacienteEncontrado;
+    //private JTextField searchBar;
     private JCheckBox chkCompletada;
-    private JComboBox<Paciente> comboPacientes;
-    private VacunacionController vacunacionController;
-    private PacienteController pacienteController;
+    //private JComboBox<Paciente> comboPacientes;
+    //private VacunacionController vacunacionController;
+    //private PacienteController pacienteController;
+    private Paciente pacienteEncontrado = null;
+    private HospitalData hospitalData = HospitalData.getInstance();
 
     public VacunacionView() {
-        vacunacionController = new VacunacionController();
-        pacienteController = new PacienteController();
+        //vacunacionController = new VacunacionController();
+        //pacienteController = new PacienteController();
         setTitle(" Control de Vacunación ");
         setSize(900, 700);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -113,12 +118,85 @@ public class VacunacionView extends JFrame {
         // Estilo común para etiquetas
         Font labelFont = new Font("Segoe UI", Font.BOLD, 14);
         Color labelColor = new Color(41, 84, 144);
-
-        // Componentes del formulario
-        JLabel lblPaciente = new JLabel(" Paciente:");
-        styleLabel(lblPaciente, labelFont, labelColor);
-        lblPaciente.setBounds(30, 30, 120, 30);
         
+        //Buscar Paciente
+        JLabel lblBuscarPaciente = new JLabel("Buscar Paciente ID:");
+        styleLabel(lblBuscarPaciente, labelFont, labelColor);
+        lblBuscarPaciente.setBounds(25, 40, 127, 30);
+
+        JTextField txtBuscarPaciente = new JTextField();
+        styleTextField(txtBuscarPaciente);
+        txtBuscarPaciente.setBounds(165, 40, 230, 35);
+
+        // Boton buscar paciente
+        JButton btnBuscarPaciente = new JButton("Buscar");
+        styleButton(btnBuscarPaciente);
+        btnBuscarPaciente.setBounds(395, 40, 80, 35);
+        formPanel.add(btnBuscarPaciente);
+
+        //Paciente
+        JLabel lblPaciente = new JLabel("Paciente:");
+        styleLabel(lblPaciente, labelFont, labelColor);
+        lblPaciente.setBounds(25, 120, 120, 30);
+
+        txtPacienteEncontrado = new JTextField();
+        styleTextField(txtPacienteEncontrado);
+        txtPacienteEncontrado.setBounds(165, 120, 280, 35);
+        txtPacienteEncontrado.setEditable(false);
+        formPanel.add(txtPacienteEncontrado);
+
+        //Vacunas
+        JLabel lblVacuna = new JLabel("Vacuna:");
+        styleLabel(lblVacuna, labelFont, labelColor);
+        lblVacuna.setBounds(25, 200, 120, 30);
+        
+        
+        txtVacuna = new JTextField();
+        styleTextField(txtVacuna);
+        txtVacuna.setBounds(165, 200, 280, 35);
+
+        JLabel lblCompletada = new JLabel("Completada:");
+        styleLabel(lblCompletada, labelFont, labelColor);
+        lblCompletada.setBounds(25, 280, 120, 30);
+
+        // Checkbox vacuna completada
+        chkCompletada = new JCheckBox();
+        chkCompletada.setBounds(165, 280, 35, 35);
+        chkCompletada.setOpaque(false);
+
+
+        // Boton para registrar vacuna
+        JButton btnRegistrarVacuna = new JButton("Registrar Vacuna");
+        styleButton(btnRegistrarVacuna);
+        btnRegistrarVacuna.setBounds(120, 450, 280, 40);
+
+        
+        //Iniciar Busqueda Paciente
+
+        btnBuscarPaciente.addActionListener(new ActionListener() {
+        	@Override
+
+        	public void actionPerformed(ActionEvent e) {
+        		try {
+        			String idPacienteStr = txtBuscarPaciente.getText().trim();
+        			idPaciente = Integer.parseInt(idPacienteStr);
+        		} catch (NumberFormatException e1) {
+        			JOptionPane.showMessageDialog(null, "Por favor, ingrese un ID de paciente valido.", "Error", JOptionPane.ERROR_MESSAGE);
+        			return;
+        		}
+        		pacienteEncontrado = HospitalData.getInstance().buscarByIdPaciente(idPaciente); 
+
+        		if (pacienteEncontrado != null) {
+        			txtPacienteEncontrado.setText(pacienteEncontrado.getNombre()+" "+pacienteEncontrado.getApellido());
+        		} else {
+        			txtPacienteEncontrado.setText("**Paciente no encontrado**");
+        		}
+
+        	}
+        });
+                
+       
+        /*
         // Agregar SearchBar
         searchBar = new JTextField();
         styleTextField(searchBar);
@@ -131,30 +209,15 @@ public class VacunacionView extends JFrame {
         }
         styleComboBox(comboPacientes);
         comboPacientes.setBounds(150, 75, 280, 35);
+        */
 
-        JLabel lblVacuna = new JLabel(" Vacuna:");
-        styleLabel(lblVacuna, labelFont, labelColor);
-        lblVacuna.setBounds(30, 130, 120, 30);
-
-        txtVacuna = new JTextField();
-        styleTextField(txtVacuna);
-        txtVacuna.setBounds(150, 130, 280, 35);
-
-        JLabel lblCompletada = new JLabel(" Completada:");
-        styleLabel(lblCompletada, labelFont, labelColor);
-        lblCompletada.setBounds(30, 190, 120, 30);
-
-        chkCompletada = new JCheckBox();
-        chkCompletada.setBounds(150, 190, 35, 35);
-        chkCompletada.setOpaque(false);
-        
-        JButton btnRegistrarVacuna = new JButton(" Registrar Vacuna");
-        styleButton(btnRegistrarVacuna);
-        btnRegistrarVacuna.setBounds(100, 260, 280, 40);
 
         // Agregar componentes al panel de formulario
         formPanel.add(lblPaciente);
-        formPanel.add(comboPacientes);
+        formPanel.add(txtPacienteEncontrado);
+        formPanel.add(lblBuscarPaciente);
+        formPanel.add(txtBuscarPaciente);
+        //formPanel.add(comboPacientes);
         formPanel.add(lblVacuna);
         formPanel.add(txtVacuna);
         formPanel.add(lblCompletada);
@@ -172,7 +235,10 @@ public class VacunacionView extends JFrame {
 
         add(mainPanel);
         setLocationRelativeTo(null);
-
+        
+        
+        
+        /*
         // Funcionalidad de búsqueda
         searchBar.addKeyListener(new KeyAdapter() {
             @Override
@@ -189,16 +255,35 @@ public class VacunacionView extends JFrame {
                 }
             }
         });
+        */
 
         btnRegistrarVacuna.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Paciente paciente = (Paciente) comboPacientes.getSelectedItem();
-                String vacuna = txtVacuna.getText();
+                Paciente paciente = (Paciente) pacienteEncontrado;
+                String nombreVacuna = txtVacuna.getText();
                 boolean completada = chkCompletada.isSelected();
-                vacunacionController.registrarVacunacion(new Vacunacion(vacuna, completada, paciente));
+                Vacunacion vacunacion = new Vacunacion(nombreVacuna, completada, paciente);
+                hospitalData.addVacunacion(vacunacion);
+                
+                //Validaciones
+				if (pacienteEncontrado == null) {
+					JOptionPane.showMessageDialog(null, "No se ha encontrado un paciente. Por favor, busque un paciente primero.", 
+							"Error", JOptionPane.ERROR_MESSAGE);
+					txtBuscarPaciente.setText("");
+					txtPacienteEncontrado.setText("");
+					return;
+				}
+				
+				if (paciente == null ||  nombreVacuna.isEmpty()) {
+        			JOptionPane.showMessageDialog(null, "❌ Por favor complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+        			return;
+        		}
+                
                 JOptionPane.showMessageDialog(null, " Vacunación registrada exitosamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 txtVacuna.setText("");
+                txtBuscarPaciente.setText("");
+                txtPacienteEncontrado.setText("");
                 chkCompletada.setSelected(false);
             }
         });

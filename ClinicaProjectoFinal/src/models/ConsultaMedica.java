@@ -1,17 +1,22 @@
 package models;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ConsultaMedica {
+public class ConsultaMedica implements Serializable {
+	private static final long serialVersionUID = 1L;
+
     private Date fecha;
     private String diagnostico;
     private String tratamiento;
+    private Doctor doctor;
     private Paciente paciente;
 
-    public ConsultaMedica(Date fecha, String diagnostico, String tratamiento, Paciente paciente) {
+    public ConsultaMedica(Date fecha, String diagnostico, String tratamiento, Doctor doctor, Paciente paciente) {
         this.fecha = fecha;
         this.diagnostico = diagnostico;
         this.tratamiento = tratamiento;
+        this.doctor = doctor;
         this.paciente = paciente;
     }
 
@@ -45,5 +50,13 @@ public class ConsultaMedica {
 
 	public void setPaciente(Paciente paciente) {
 		this.paciente = paciente;
+	}
+	
+	public Doctor getDoctor() {
+		return doctor;
+	}
+
+	public void setDoctor(Doctor doctor) {
+		this.doctor = doctor;
 	}
 }

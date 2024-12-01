@@ -2,6 +2,7 @@ package views;
 
 import javax.swing.*;
 import controllers.HistoriaClinicaController;
+import controllers.HospitalData;
 import controllers.PacienteController;
 import models.HistoriaClinica;
 import models.Paciente;
@@ -12,11 +13,15 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class HistoriaClinicaView extends JFrame {
-    private JComboBox<Paciente> comboPacientes;
-    private JTextField searchBar;
+    //private JComboBox<Paciente> comboPacientes;
+    //private JTextField searchBar;
+	private int idPaciente;
+	private JTextField txtPacienteEncontrado;
     private JTextArea txtResumenHistoria;
     private HistoriaClinicaController historiaClinicaController;
     private PacienteController pacienteController;
+    private Paciente pacienteEncontrado = null;
+    private HospitalData hospitalData = HospitalData.getInstance();
 
     public HistoriaClinicaView() {
         historiaClinicaController = new HistoriaClinicaController();
@@ -112,14 +117,62 @@ public class HistoriaClinicaView extends JFrame {
         
         Font labelFont = new Font("Segoe UI", Font.BOLD, 14);
         Color labelColor = new Color(41, 84, 144);
-
         
-        JLabel lblPaciente = new JLabel(" Seleccione Paciente:");
+        
+        //Buscar Paciente
+        JLabel lblBuscarPaciente = new JLabel("Buscar Paciente ID:");
+        styleLabel(lblBuscarPaciente, labelFont, labelColor);
+        lblBuscarPaciente.setBounds(25, 40, 127, 30);
+        contentPanel.add(lblBuscarPaciente);
+
+        JTextField txtBuscarPaciente = new JTextField();
+        styleTextField(txtBuscarPaciente);
+        txtBuscarPaciente.setBounds(165, 40, 230, 35);
+        contentPanel.add(txtBuscarPaciente);
+
+        // Boton buscar paciente
+        JButton btnBuscarPaciente = new JButton("Buscar");
+        styleButton(btnBuscarPaciente);
+        btnBuscarPaciente.setBounds(395, 40, 80, 35);
+        contentPanel.add(btnBuscarPaciente);
+
+        //Paciente
+        JLabel lblPaciente = new JLabel("Paciente:");
         styleLabel(lblPaciente, labelFont, labelColor);
-        lblPaciente.setBounds(30, 30, 180, 30);
+        lblPaciente.setBounds(25, 120, 120, 30);
         contentPanel.add(lblPaciente);
 
+        txtPacienteEncontrado = new JTextField();
+        styleTextField(txtPacienteEncontrado);
+        txtPacienteEncontrado.setBounds(165, 120, 280, 35);
+        txtPacienteEncontrado.setEditable(false);
+        contentPanel.add(txtPacienteEncontrado);
         
+        //Iniciar Busqueda Paciente
+
+        btnBuscarPaciente.addActionListener(new ActionListener() {
+        	@Override
+
+        	public void actionPerformed(ActionEvent e) {
+        		try {
+        			String idPacienteStr = txtBuscarPaciente.getText().trim();
+        			idPaciente = Integer.parseInt(idPacienteStr);
+        		} catch (NumberFormatException e1) {
+        			JOptionPane.showMessageDialog(null, "Por favor, ingrese un ID de paciente valido.", "Error", JOptionPane.ERROR_MESSAGE);
+        			return;
+        		}
+        		pacienteEncontrado = HospitalData.getInstance().buscarByIdPaciente(idPaciente); 
+
+        		if (pacienteEncontrado != null) {
+        			txtPacienteEncontrado.setText(pacienteEncontrado.getNombre()+" "+pacienteEncontrado.getApellido());
+        		} else {
+        			txtPacienteEncontrado.setText("**Paciente no encontrado**");
+        		}
+
+        	}
+        });
+
+        /*
         searchBar = new JTextField();
         searchBar.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         searchBar.setBorder(BorderFactory.createCompoundBorder(
@@ -137,6 +190,7 @@ public class HistoriaClinicaView extends JFrame {
         styleComboBox(comboPacientes);
         comboPacientes.setBounds(30, 115, 420, 35);
         contentPanel.add(comboPacientes);
+        */
 
         
         JButton btnVerResumen = new JButton(" Ver Historia Clínica");
@@ -178,7 +232,7 @@ public class HistoriaClinicaView extends JFrame {
         add(mainPanel);
         setLocationRelativeTo(null);
 
-        
+        /*
         searchBar.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
@@ -194,29 +248,35 @@ public class HistoriaClinicaView extends JFrame {
                 }
             }
         });
+        */
 
-        
+
         btnVerResumen.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Paciente paciente = (Paciente) comboPacientes.getSelectedItem();
-                
-                if (paciente == null) {
-                    JOptionPane.showMessageDialog(
-                        HistoriaClinicaView.this, 
-                        "Error: No hay paciente seleccionado.", 
-                        "Selecciona un paciente", 
-                        JOptionPane.ERROR_MESSAGE
-                    );
-                } else {
-                    HistoriaClinica historia = historiaClinicaController.obtenerHistoria(paciente.getDni());
-                    if (historia != null) {
-                        txtResumenHistoria.setText(historia.generarResumen());
-                    } else {
-                        txtResumenHistoria.setText("❌ No hay historia clínica registrada para este paciente.");
-                    }
-                }
-            }
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        		Paciente paciente = (Paciente) pacienteEncontrado;
+
+        		//Validaciones
+        		if (pacienteEncontrado == null) {
+        			JOptionPane.showMessageDialog(null, "No se ha encontrado un paciente. Por favor, busque un paciente primero.", 
+        					"Error", JOptionPane.ERROR_MESSAGE);
+        			txtBuscarPaciente.setText("");
+        			txtPacienteEncontrado.setText("");
+        			return;
+        		}
+
+        		if (paciente == null) {
+        			JOptionPane.showMessageDialog(null, "❌ Por favor complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+        			return;
+        		} else {
+        			String historiaResumen = hospitalData.obtenerResumenHistoriaClinica(paciente.getId());
+        			if (historiaResumen != null) {
+        				txtResumenHistoria.setText(historiaResumen);
+        			} else {
+        				txtResumenHistoria.setText("❌ No hay historia clínica registrada para este paciente.");
+        			}
+        		}
+        	}
         });
     }
 
@@ -238,5 +298,14 @@ public class HistoriaClinicaView extends JFrame {
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createEmptyBorder());
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
+    
+    private void styleTextField(JTextField textField) {
+        textField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        textField.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(135, 206, 250), 2),
+            BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
+        textField.setBackground(new Color(240, 248, 255));
     }
 }

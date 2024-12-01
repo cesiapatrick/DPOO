@@ -9,6 +9,7 @@ import javax.swing.border.*;
 import controllers.ConsultaController;
 import controllers.EnfermedadController;
 import controllers.HistoriaClinicaController;
+import controllers.HospitalData;
 import controllers.PacienteController;
 import controllers.VacunacionController;
 import controllers.ViviendaController;
@@ -27,6 +28,8 @@ public class MainView extends JFrame {
     private EnfermedadController enfermedadController;
     private VacunacionController vacunacionController;
     private HistoriaClinicaController historiaClinicaController;
+    private HospitalData hospitalData = HospitalData.getInstance();
+    
 
     
     private final Color PRIMARY_COLOR = new Color(41, 128, 185);
@@ -43,7 +46,7 @@ public class MainView extends JFrame {
         
         setTitle(" Sistema de Gestión de Clínica Médica");
         setSize(1200, 800);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
 
         
@@ -65,6 +68,22 @@ public class MainView extends JFrame {
         
         JPanel footer = createFooter();
         mainPanel.add(footer, BorderLayout.SOUTH);
+        
+      //Al cerrar ventana Principal - GuardarDatos
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+            	int opcion = JOptionPane.showConfirmDialog(MainView.this, "¿Estás seguro de que quieres salir?", "Confirmar salida", JOptionPane.YES_NO_OPTION);
+                
+                if (opcion == JOptionPane.YES_OPTION) {
+                	hospitalData.guardarDatosArchivo();
+                    dispose();
+                } else {
+                	return;
+                }
+                
+            }
+        });
     }
 
     private void initializeControllers() {
@@ -170,7 +189,7 @@ public class MainView extends JFrame {
 
         
         String[][] menuItems = {
-            {" Registro de Viviendas", "vivienda"},
+            //{" Registro de Viviendas", "vivienda"},
             {" Registro de Pacientes", "paciente"},
             {" Crear Doctor", "doctor"},
             {" Gestión de Consultas", "consulta"},
@@ -281,7 +300,7 @@ public class MainView extends JFrame {
     private void handleButtonClick(String buttonName) {
         switch (buttonName) {
             case "vivienda":
-                new ViviendaView().setVisible(true);
+                //new ViviendaView(null).setVisible(true);
                 break;
             case "paciente":
                 new PacienteView().setVisible(true);
@@ -316,34 +335,36 @@ public class MainView extends JFrame {
     private void generarReporte() {
         StringBuilder reporte = new StringBuilder();
         reporte.append("===== Reporte del Sistema de Gestión de Clínica Médica =====\n\n");
-
+        
+        /*
         // Viviendas
         reporte.append("Viviendas:\n");
         for (Vivienda vivienda : viviendaController.listarViviendas()) {
             reporte.append("- ").append(vivienda.getDireccion()).append(", ").append(vivienda.getCiudad()).append(", ").append(vivienda.getCodigoPostal()).append("\n");
         }
+        */
 
         // Pacientes
         reporte.append("\nPacientes:\n");
-        for (Paciente paciente : pacienteController.listarPacientes()) {
-            reporte.append("- ").append(paciente.getNombre()).append(", DNI: ").append(paciente.getDni()).append("\n");
+        for (Paciente paciente : hospitalData.getPacientes()) {
+            reporte.append("- ").append(paciente.getNombre()).append(", ID: ").append(paciente.getId()).append("\n");
         }
 
         // Consultas Médicas
         reporte.append("\nConsultas Médicas:\n");
-        for (ConsultaMedica consulta : consultaController.listarConsultas()) {
+        for (ConsultaMedica consulta :  hospitalData.getConsultasMedicas()) {
             reporte.append("- Paciente: ").append(consulta.getPaciente().getNombre()).append(", Diagnóstico: ").append(consulta.getDiagnostico()).append("\n");
         }
 
         // Enfermedades
         reporte.append("\nEnfermedades:\n");
-        for (Enfermedad enfermedad : enfermedadController.listarEnfermedades()) {
+        for (Enfermedad enfermedad :  hospitalData.getEnfermedades()) {
             reporte.append("- ").append(enfermedad.getNombre()).append(", En Vigilancia: ").append(enfermedad.isEnVigilancia() ? "Sí" : "No").append("\n");
         }
 
         // Vacunaciones
         reporte.append("\nVacunación:\n");
-        for (Vacunacion vacunacion : vacunacionController.listarVacunaciones()) {
+        for (Vacunacion vacunacion :  hospitalData.getVacunas()) {
             reporte.append("- Paciente: ").append(vacunacion.getPaciente().getNombre()).append(", Vacuna: ").append(vacunacion.getVacuna()).append(", Completada: ").append(vacunacion.isCompletada() ? "Sí" : "No").append("\n");
         }
 
@@ -394,4 +415,6 @@ public class MainView extends JFrame {
             new MainView().setVisible(true);
         });
     }
+    
+    
 }

@@ -2,6 +2,7 @@ package views;
 
 import javax.swing.*;
 import controllers.EnfermedadController;
+import controllers.HospitalData;
 import models.Enfermedad;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,11 +14,12 @@ import java.awt.image.BufferedImage;
 public class EnfermedadView extends JFrame {
     private JTextField txtNombre;
     private JCheckBox chkVigilancia;
-    private JTextField txtBuscar;
-    private EnfermedadController enfermedadController;
+    //private JTextField txtBuscar;
+    //private EnfermedadController enfermedadController;
+    private HospitalData hospitalData = HospitalData.getInstance();
 
     public EnfermedadView() {
-        enfermedadController = new EnfermedadController();
+        //enfermedadController = new EnfermedadController();
         setTitle(" Control de Enfermedades");
         setSize(700, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -110,7 +112,7 @@ public class EnfermedadView extends JFrame {
         Font labelFont = new Font("Segoe UI", Font.BOLD, 14);
         Color labelColor = new Color(41, 84, 144);
 
-        
+        /*
         JLabel lblBuscar = new JLabel(" Buscar Enfermedad:");
         styleLabel(lblBuscar, labelFont, labelColor);
         lblBuscar.setBounds(20, 160, 290, 30);
@@ -126,6 +128,7 @@ public class EnfermedadView extends JFrame {
 
             }
         });
+        */
 
         JLabel lblNombre = new JLabel(" Nombre de la Enfermedad:");
         styleLabel(lblNombre, labelFont, labelColor);
@@ -150,8 +153,8 @@ public class EnfermedadView extends JFrame {
         btnRegistrarEnfermedad.setBounds(20, 250, 290, 40);
 
         
-        formPanel.add(lblBuscar);
-        formPanel.add(txtBuscar);
+        //formPanel.add(lblBuscar);
+        //formPanel.add(txtBuscar);
         formPanel.add(lblNombre);
         formPanel.add(txtNombre);
         formPanel.add(lblVigilancia);
@@ -181,7 +184,16 @@ public class EnfermedadView extends JFrame {
                     return;
                 }
                 
-                enfermedadController.registrarEnfermedad(new Enfermedad(nombre, enVigilancia));
+                if (hospitalData.validadEnfermedadRegistrada(nombre)) {
+                	JOptionPane.showMessageDialog(null, "El nombre de la enfermedad ya esta registrado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    txtNombre.setText("");
+                	return;
+                }
+                
+                //Guardar Enfermedad
+                Enfermedad enfermedad = new Enfermedad(nombre, enVigilancia);
+                HospitalData.getInstance().addEnfermedad(enfermedad);
+                
                 JOptionPane.showMessageDialog(null, " Enfermedad registrada exitosamente!", 
                     "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 txtNombre.setText("");

@@ -1,22 +1,26 @@
 package models;
 
-public class Vacunacion {
-    private String vacuna;
+import java.io.Serializable;
+
+public class Vacunacion implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
+    private String nombreVacuna;
     private boolean completada;
     private Paciente paciente;
 
-    public Vacunacion(String vacuna, boolean completada, Paciente paciente) {
-        this.vacuna = vacuna;
+    public Vacunacion(String nombreVacuna, boolean completada, Paciente paciente) {
+        this.nombreVacuna = nombreVacuna;
         this.completada = completada;
         this.paciente = paciente;
     }
 
 	public String getVacuna() {
-		return vacuna;
+		return nombreVacuna;
 	}
 
 	public void setVacuna(String vacuna) {
-		this.vacuna = vacuna;
+		this.nombreVacuna = vacuna;
 	}
 
 	public boolean isCompletada() {
