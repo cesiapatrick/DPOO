@@ -35,7 +35,9 @@ public class HospitalData implements Serializable {
 	private ArrayList<Usuario> usuarios;
     
     private static HospitalData hospitalData = null;
-    
+    private static Usuario usuarioActivo;
+
+
     
     private HospitalData() {
         doctores = new ArrayList<>();
@@ -53,6 +55,15 @@ public class HospitalData implements Serializable {
         }
         return hospitalData;
     }
+    
+    public void setUsuarioActivo (Usuario usuarioActivo) {
+    	HospitalData.usuarioActivo = usuarioActivo;
+    }
+    
+    public Usuario getUsuarioActivo () {
+    	return usuarioActivo;
+    }
+    
     
     public static void setHospitalData(HospitalData hospitaDataArchivo) {
     	hospitalData = hospitaDataArchivo;
@@ -230,7 +241,7 @@ public class HospitalData implements Serializable {
         usuarios.add(usuario);
     }
     
-    public void setUsuario(ArrayList<Usuario> usuarios) {
+    public void setUsuarios(ArrayList<Usuario> usuarios) {
     	this.usuarios = usuarios;
     }
     
