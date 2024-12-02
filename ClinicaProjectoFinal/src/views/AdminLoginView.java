@@ -3,6 +3,7 @@ package views;
 import javax.swing.*;
 import controllers.DoctorController;
 import controllers.HospitalData;
+import models.Doctor;
 import models.Paciente;
 import models.Usuario;
 
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.FileSystemNotFoundException;
+import java.util.ArrayList;
 
 public class AdminLoginView extends JFrame {
     private JTextField txtUsername;
@@ -28,13 +30,10 @@ public class AdminLoginView extends JFrame {
     private HospitalData hospitalData = HospitalData.getInstance();
     private static final String ADMIN_USERNAME = "admin";
     private static final String ADMIN_PASSWORD = "admin123";
+    private Usuario usuario = null;
     
     public AdminLoginView() {
     	
-    	//Cargar datos Archivo
-    	hospitalData.cargarDatosArchivo();
-
-
         setTitle(" Sistema de Acceso Médico ");
         setSize(900, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -132,19 +131,12 @@ public class AdminLoginView extends JFrame {
         lblRol.setBounds(30, 150, 120, 30);
         formPanel.add(lblRol);
 
-        comboRol = new JComboBox();
+        comboRol = new JComboBox<String>();
         comboRol.addItem("Doctor");
         comboRol.addItem("Administrador");
         styleComboBox(comboRol);
         comboRol.setBounds(150, 150, 280, 35);
         formPanel.add(comboRol);
-        
-        /*
-        addFormField(formPanel, " Nombre:", txtNombre = new JTextField(), 210);
-        addFormField(formPanel, " Apellido:", txtApellido = new JTextField(), 270);
-        addFormField(formPanel, " Especialidad:", txtEspecialidad = new JTextField(), 330);
-        */
-
         
         JButton btnLogin = new JButton(" Iniciar Sesión");
         styleButton(btnLogin);
@@ -202,21 +194,26 @@ public class AdminLoginView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String username = txtUsername.getText();
                 String password = new String(txtPassword.getPassword());
-
+                String tipo = comboRol.getSelectedItem().toString();
+               
+                
+                if (username.isEmpty() || password.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Por favor complete todos los campos.", 
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
                 if (comboRol.getSelectedItem().equals("Doctor")) {
-                    if (username.isEmpty() || password.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Por favor complete todos los campos.", 
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
 
                     if (hospitalData.autenticarRegistro(username)) {
                         JOptionPane.showMessageDialog(null, "Doctor registrado exitosamente");
-                        Usuario usuarioDoctor = new Usuario(username, password, comboRol.getSelectedItem().toString());
-                        hospitalData.addUsuario(usuarioDoctor);
-               
+                        
+                        usuario = new Usuario(username, password, tipo);
+                        hospitalData.addUsuario(usuario);
+                        
                         new MainView().setVisible(true);
                         dispose();
+                        
                     } else {
                         JOptionPane.showMessageDialog(null, "El usuario ya existe", 
                             "Error", JOptionPane.ERROR_MESSAGE);
@@ -225,27 +222,11 @@ public class AdminLoginView extends JFrame {
                 }  else {
                     JOptionPane.showMessageDialog(null, "Solo el administrador puede registrar a otros administradores.", 
                         "Aviso", JOptionPane.WARNING_MESSAGE);
-
-                    if (username.isEmpty() || password.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Por favor complete todos los campos.", 
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-
-                    if (hospitalData.autenticarRegistro(username)) {
-                        JOptionPane.showMessageDialog(null, "Doctor registrado exitosamente");
-                        limpiarCampos();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "El usuario ya existe", 
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                    }
                 }
             }
         });
 
         comboRol.setSelectedItem("Doctor");
-
-
     }
 
     private void addFormField(JPanel panel, String labelText, JTextField field, int y) {
