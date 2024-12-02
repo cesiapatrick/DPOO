@@ -30,8 +30,6 @@ public class MainView extends JFrame {
     private HistoriaClinicaController historiaClinicaController;
     private HospitalData hospitalData = HospitalData.getInstance();
     
-
-    
     private final Color PRIMARY_COLOR = new Color(41, 128, 185);
     private final Color SECONDARY_COLOR = new Color(52, 152, 219);
     private final Color BACKGROUND_START = new Color(236, 240, 241);
@@ -40,9 +38,8 @@ public class MainView extends JFrame {
     private final Color CARD_BACKGROUND = new Color(255, 255, 255, 240);
 
     public MainView() {
-        
+    	
         initializeControllers();
-        
         
         setTitle(" Sistema de Gestión de Clínica Médica");
         setSize(1200, 800);
