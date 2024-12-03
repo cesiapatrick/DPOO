@@ -22,9 +22,6 @@ import java.util.ArrayList;
 public class AdminLoginView extends JFrame {
     private JTextField txtUsername;
     private JPasswordField txtPassword;
-    //private JTextField txtNombre;
-    //private JTextField txtApellido;
-    //private JTextField txtEspecialidad;
     private JComboBox<String> comboRol;
     //private DoctorController doctorController;
     private HospitalData hospitalData = HospitalData.getInstance();
@@ -283,8 +280,5 @@ public class AdminLoginView extends JFrame {
     private void limpiarCampos() {
         txtUsername.setText("");
         txtPassword.setText("");
-        //txtNombre.setText("");
-        //txtApellido.setText("");
-        //txtEspecialidad.setText("");
     }
 }
