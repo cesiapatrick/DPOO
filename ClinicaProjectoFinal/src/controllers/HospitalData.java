@@ -30,12 +30,11 @@ public class HospitalData implements Serializable {
     private ArrayList<Paciente> pacientes;
 	private ArrayList<Vacunacion> vacunaciones;
 	private ArrayList<Enfermedad> enfermedades;
-	private HashMap<Integer, HistoriaClinica> historiasClinicas;
 	private ArrayList<ConsultaMedica> consultasMedicas;
 	private ArrayList<Usuario> usuarios;
     
     private static HospitalData hospitalData = null;
-    private static Usuario usuarioActivo;
+    private String categoriaUsuario = null;
 
 
     
@@ -44,7 +43,6 @@ public class HospitalData implements Serializable {
         pacientes = new ArrayList<>();
         vacunaciones = new ArrayList<>();
         enfermedades = new ArrayList<>();
-        historiasClinicas = new HashMap<>();
         consultasMedicas = new ArrayList<>();
         usuarios = new ArrayList<>();
     }
@@ -56,12 +54,12 @@ public class HospitalData implements Serializable {
         return hospitalData;
     }
     
-    public void setUsuarioActivo (Usuario usuarioActivo) {
-    	HospitalData.usuarioActivo = usuarioActivo;
+    public void setUsuarioActivo (String categoriaUsuario) {
+    	this.categoriaUsuario = categoriaUsuario;
     }
     
-    public Usuario getUsuarioActivo () {
-    	return usuarioActivo;
+    public String getUsuarioActivo () {
+    	return categoriaUsuario;
     }
     
     
@@ -86,19 +84,7 @@ public class HospitalData implements Serializable {
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
-        } else {
-            
-            inicializarDatosPorDefecto();
-        }
-    }
-    private void inicializarDatosPorDefecto() {
-        doctores = new ArrayList<>();
-        pacientes = new ArrayList<>();
-        vacunaciones = new ArrayList<>();
-        enfermedades = new ArrayList<>();
-        historiasClinicas = new HashMap<>();
-        consultasMedicas = new ArrayList<>();
-        usuarios = new ArrayList<>();
+        } 
     }
     
     public void actualizarArrayClases() {
