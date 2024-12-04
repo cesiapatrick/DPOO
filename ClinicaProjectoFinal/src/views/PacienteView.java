@@ -3,7 +3,6 @@ package views;
 import javax.swing.*;
 
 import controllers.HospitalData;
-import controllers.ViviendaController;
 import models.Paciente;
 import models.Vivienda;
 import java.awt.*;
@@ -19,14 +18,11 @@ public class PacienteView extends JFrame {
     private JTextField txtCedula;
     private JComboBox<String> comboTipoSangre;
     private JComboBox<String> comboGenero;
-    //private JComboBox<Vivienda> comboViviendas;
-    //private ViviendaController viviendaController;
     private HospitalData hospitalData = HospitalData.getInstance();
     private int idPaciente = hospitalData.getIdPacientes();
     private Vivienda vivienda;
 
     public PacienteView() {
-        //viviendaController = new ViviendaController();
         setTitle("✨ Registro de Pacientes ✨");
         setSize(900, 700);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -159,13 +155,7 @@ public class PacienteView extends JFrame {
             }
         });
         formPanel.add(btnRegistrarVivienda);
-        
-        /*
-        // Poblar combo de viviendas
-        for (Vivienda vivienda : viviendaController.listarViviendas()) {
-            comboViviendas.addItem(vivienda);
-        }
-        */
+
 
         // Botón de registro
         JButton btnRegistrar = new JButton("Registrar Paciente");

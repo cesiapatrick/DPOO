@@ -6,7 +6,6 @@ import java.awt.event.*;
 import java.awt.geom.*;
 import javax.swing.border.*;
 import controllers.HospitalData;
-import controllers.ViviendaController;
 import models.ConsultaMedica;
 import models.Enfermedad;
 import models.Paciente;
@@ -16,8 +15,7 @@ import models.Vivienda;
 import java.io.*;
 
 public class MainView extends JFrame {
-    private ViviendaController viviendaController;
-
+	
     private HospitalData hospitalData = HospitalData.getInstance();
     
     private final Color PRIMARY_COLOR = new Color(41, 128, 185);
@@ -29,7 +27,6 @@ public class MainView extends JFrame {
 
     public MainView() {
     	
-        initializeControllers();
         
         setTitle(" Sistema de Gestión de Clínica Médica");
         setSize(1200, 800);
@@ -71,10 +68,6 @@ public class MainView extends JFrame {
                 
             }
         });
-    }
-
-    private void initializeControllers() {
-        viviendaController = new ViviendaController();
     }
 
     private JPanel createMainPanel() {

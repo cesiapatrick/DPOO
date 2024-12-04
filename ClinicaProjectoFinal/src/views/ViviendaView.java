@@ -1,7 +1,6 @@
 package views;
 
 import javax.swing.*;
-import controllers.ViviendaController;
 import models.Vivienda;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,15 +11,12 @@ public class ViviendaView extends JFrame {
     private JTextField txtCiudad;
     private JTextField txtCodigoPostal;
     private JComboBox<String> comboTipo;
-    private ViviendaController viviendaController;
-    
     private ViviendaAddedListener viviendaAddedListener;
     private Vivienda vivienda;
     
 
     public ViviendaView(ViviendaAddedListener listener) {
     	this.viviendaAddedListener = listener;
-        viviendaController = new ViviendaController();
         setTitle(" Registro de Viviendas ");
         setSize(900, 700);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
