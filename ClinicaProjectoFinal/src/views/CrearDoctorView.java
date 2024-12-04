@@ -1,7 +1,6 @@
 package views;
 
 import javax.swing.*;
-import controllers.DoctorController;
 import controllers.HospitalData;
 import models.Doctor;
 
@@ -14,7 +13,6 @@ public class CrearDoctorView extends JFrame {
 	private JTextField txtNombre;
 	private JTextField txtApellido;
 	private JTextField txtEspecialidad;
-	//private DoctorController doctorController;
 	private Doctor doctor = null;
 	private HospitalData hospitalData = HospitalData.getInstance();
 	private int idDoctor = hospitalData.getIdMedicos();

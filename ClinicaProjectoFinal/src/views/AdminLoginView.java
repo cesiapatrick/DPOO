@@ -1,7 +1,6 @@
 package views;
 
 import javax.swing.*;
-import controllers.DoctorController;
 import controllers.HospitalData;
 import models.Doctor;
 import models.Paciente;
