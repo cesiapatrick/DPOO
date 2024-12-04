@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 import javax.swing.border.*;
-import controllers.HistoriaClinicaController;
 import controllers.HospitalData;
 import controllers.PacienteController;
 import controllers.VacunacionController;
@@ -23,7 +22,6 @@ public class MainView extends JFrame {
     private PacienteController pacienteController;
 
     private VacunacionController vacunacionController;
-    private HistoriaClinicaController historiaClinicaController;
     private HospitalData hospitalData = HospitalData.getInstance();
     
     private final Color PRIMARY_COLOR = new Color(41, 128, 185);
@@ -84,7 +82,6 @@ public class MainView extends JFrame {
         pacienteController = new PacienteController();
         
         vacunacionController = new VacunacionController();
-        historiaClinicaController = new HistoriaClinicaController();
     }
 
     private JPanel createMainPanel() {

@@ -1,7 +1,6 @@
 package views;
 
 import javax.swing.*;
-import controllers.HistoriaClinicaController;
 import controllers.HospitalData;
 import controllers.PacienteController;
 import models.HistoriaClinica;
@@ -18,13 +17,12 @@ public class HistoriaClinicaView extends JFrame {
 	private int idPaciente;
 	private JTextField txtPacienteEncontrado;
     private JTextArea txtResumenHistoria;
-    private HistoriaClinicaController historiaClinicaController;
     private PacienteController pacienteController;
     private Paciente pacienteEncontrado = null;
     private HospitalData hospitalData = HospitalData.getInstance();
 
     public HistoriaClinicaView() {
-        historiaClinicaController = new HistoriaClinicaController();
+    	
         pacienteController = new PacienteController();
         setTitle(" Gestión de Historias Clínicas ");
         setSize(900, 700);
