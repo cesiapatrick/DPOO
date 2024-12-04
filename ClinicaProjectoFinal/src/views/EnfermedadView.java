@@ -1,7 +1,6 @@
 package views;
 
 import javax.swing.*;
-import controllers.EnfermedadController;
 import controllers.HospitalData;
 import models.Enfermedad;
 import java.awt.*;
@@ -14,8 +13,6 @@ import java.awt.image.BufferedImage;
 public class EnfermedadView extends JFrame {
     private JTextField txtNombre;
     private JCheckBox chkVigilancia;
-    //private JTextField txtBuscar;
-    //private EnfermedadController enfermedadController;
     private HospitalData hospitalData = HospitalData.getInstance();
 
     public EnfermedadView() {

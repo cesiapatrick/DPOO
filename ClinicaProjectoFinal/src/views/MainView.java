@@ -5,8 +5,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 import javax.swing.border.*;
-
-import controllers.EnfermedadController;
 import controllers.HistoriaClinicaController;
 import controllers.HospitalData;
 import controllers.PacienteController;
@@ -24,7 +22,6 @@ public class MainView extends JFrame {
     private ViviendaController viviendaController;
     private PacienteController pacienteController;
 
-    private EnfermedadController enfermedadController;
     private VacunacionController vacunacionController;
     private HistoriaClinicaController historiaClinicaController;
     private HospitalData hospitalData = HospitalData.getInstance();
@@ -86,7 +83,6 @@ public class MainView extends JFrame {
         viviendaController = new ViviendaController();
         pacienteController = new PacienteController();
         
-        enfermedadController = new EnfermedadController();
         vacunacionController = new VacunacionController();
         historiaClinicaController = new HistoriaClinicaController();
     }
