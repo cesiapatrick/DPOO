@@ -3,7 +3,6 @@ package views;
 import javax.swing.*;
 import controllers.VacunacionController;
 import controllers.HospitalData;
-import controllers.PacienteController;
 import models.Vacunacion;
 import models.Paciente;
 import java.awt.*;
@@ -18,15 +17,12 @@ public class VacunacionView extends JFrame {
     private JTextField txtPacienteEncontrado;
     //private JTextField searchBar;
     private JCheckBox chkCompletada;
-    //private JComboBox<Paciente> comboPacientes;
     //private VacunacionController vacunacionController;
-    //private PacienteController pacienteController;
     private Paciente pacienteEncontrado = null;
     private HospitalData hospitalData = HospitalData.getInstance();
 
     public VacunacionView() {
         //vacunacionController = new VacunacionController();
-        //pacienteController = new PacienteController();
         setTitle(" Control de Vacunación ");
         setSize(900, 700);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -195,22 +191,6 @@ public class VacunacionView extends JFrame {
         	}
         });
                 
-       
-        /*
-        // Agregar SearchBar
-        searchBar = new JTextField();
-        styleTextField(searchBar);
-        searchBar.setBounds(150, 30, 280, 35);
-        formPanel.add(searchBar);
-        
-        comboPacientes = new JComboBox<>();
-        for (Paciente paciente : pacienteController.listarPacientes()) {
-            comboPacientes.addItem(paciente);
-        }
-        styleComboBox(comboPacientes);
-        comboPacientes.setBounds(150, 75, 280, 35);
-        */
-
 
         // Agregar componentes al panel de formulario
         formPanel.add(lblPaciente);
@@ -236,26 +216,6 @@ public class VacunacionView extends JFrame {
         add(mainPanel);
         setLocationRelativeTo(null);
         
-        
-        
-        /*
-        // Funcionalidad de búsqueda
-        searchBar.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                String searchText = searchBar.getText().toLowerCase();
-                comboPacientes.removeAllItems();
-                for (Paciente paciente : pacienteController.listarPacientes()) {
-                    if (paciente.toString().toLowerCase().contains(searchText)) {
-                        comboPacientes.addItem(paciente);
-                    }
-                }
-                if (comboPacientes.getItemCount() > 0) {
-                    comboPacientes.setSelectedIndex(0);
-                }
-            }
-        });
-        */
 
         btnRegistrarVacuna.addActionListener(new ActionListener() {
             @Override

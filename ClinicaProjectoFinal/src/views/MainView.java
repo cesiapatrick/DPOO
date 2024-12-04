@@ -6,7 +6,6 @@ import java.awt.event.*;
 import java.awt.geom.*;
 import javax.swing.border.*;
 import controllers.HospitalData;
-import controllers.PacienteController;
 import controllers.VacunacionController;
 import controllers.ViviendaController;
 import models.ConsultaMedica;
@@ -19,7 +18,6 @@ import java.io.*;
 
 public class MainView extends JFrame {
     private ViviendaController viviendaController;
-    private PacienteController pacienteController;
 
     private VacunacionController vacunacionController;
     private HospitalData hospitalData = HospitalData.getInstance();
@@ -79,7 +77,6 @@ public class MainView extends JFrame {
 
     private void initializeControllers() {
         viviendaController = new ViviendaController();
-        pacienteController = new PacienteController();
         
         vacunacionController = new VacunacionController();
     }

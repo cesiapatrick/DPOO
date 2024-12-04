@@ -2,7 +2,6 @@ package views;
 
 import javax.swing.*;
 import controllers.HospitalData;
-import controllers.PacienteController;
 import models.HistoriaClinica;
 import models.Paciente;
 import java.awt.*;
@@ -12,18 +11,14 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class HistoriaClinicaView extends JFrame {
-    //private JComboBox<Paciente> comboPacientes;
-    //private JTextField searchBar;
 	private int idPaciente;
 	private JTextField txtPacienteEncontrado;
     private JTextArea txtResumenHistoria;
-    private PacienteController pacienteController;
     private Paciente pacienteEncontrado = null;
     private HospitalData hospitalData = HospitalData.getInstance();
 
     public HistoriaClinicaView() {
     	
-        pacienteController = new PacienteController();
         setTitle(" Gestión de Historias Clínicas ");
         setSize(900, 700);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -170,26 +165,6 @@ public class HistoriaClinicaView extends JFrame {
         	}
         });
 
-        /*
-        searchBar = new JTextField();
-        searchBar.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        searchBar.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(135, 206, 250), 2),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)
-        ));
-        searchBar.setBounds(30, 70, 420, 35);
-        searchBar.setBackground(new Color(240, 248, 255));
-        contentPanel.add(searchBar);
-
-        comboPacientes = new JComboBox<>();
-        for (Paciente paciente : pacienteController.listarPacientes()) {
-            comboPacientes.addItem(paciente);
-        }
-        styleComboBox(comboPacientes);
-        comboPacientes.setBounds(30, 115, 420, 35);
-        contentPanel.add(comboPacientes);
-        */
-
         
         JButton btnVerResumen = new JButton(" Ver Historia Clínica");
         styleButton(btnVerResumen);
@@ -229,25 +204,6 @@ public class HistoriaClinicaView extends JFrame {
 
         add(mainPanel);
         setLocationRelativeTo(null);
-
-        /*
-        searchBar.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                String searchText = searchBar.getText().toLowerCase();
-                comboPacientes.removeAllItems();
-                for (Paciente paciente : pacienteController.listarPacientes()) {
-                    if (paciente.toString().toLowerCase().contains(searchText)) {
-                        comboPacientes.addItem(paciente);
-                    }
-                }
-                if (comboPacientes.getItemCount() > 0) {
-                    comboPacientes.setSelectedIndex(0);
-                }
-            }
-        });
-        */
-
 
         btnVerResumen.addActionListener(new ActionListener() {
         	@Override

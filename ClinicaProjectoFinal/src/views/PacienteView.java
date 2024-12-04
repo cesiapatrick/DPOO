@@ -3,7 +3,6 @@ package views;
 import javax.swing.*;
 
 import controllers.HospitalData;
-import controllers.PacienteController;
 import controllers.ViviendaController;
 import models.Paciente;
 import models.Vivienda;
@@ -21,14 +20,12 @@ public class PacienteView extends JFrame {
     private JComboBox<String> comboTipoSangre;
     private JComboBox<String> comboGenero;
     //private JComboBox<Vivienda> comboViviendas;
-    //private PacienteController pacienteController;
     //private ViviendaController viviendaController;
     private HospitalData hospitalData = HospitalData.getInstance();
     private int idPaciente = hospitalData.getIdPacientes();
     private Vivienda vivienda;
 
     public PacienteView() {
-        //pacienteController = new PacienteController();
         //viviendaController = new ViviendaController();
         setTitle("✨ Registro de Pacientes ✨");
         setSize(900, 700);
