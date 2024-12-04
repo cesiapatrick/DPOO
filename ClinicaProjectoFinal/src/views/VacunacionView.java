@@ -1,7 +1,6 @@
 package views;
 
 import javax.swing.*;
-import controllers.VacunacionController;
 import controllers.HospitalData;
 import models.Vacunacion;
 import models.Paciente;
@@ -15,14 +14,11 @@ public class VacunacionView extends JFrame {
     private JTextField txtVacuna;
     private int idPaciente;
     private JTextField txtPacienteEncontrado;
-    //private JTextField searchBar;
     private JCheckBox chkCompletada;
-    //private VacunacionController vacunacionController;
     private Paciente pacienteEncontrado = null;
     private HospitalData hospitalData = HospitalData.getInstance();
 
     public VacunacionView() {
-        //vacunacionController = new VacunacionController();
         setTitle(" Control de Vacunación ");
         setSize(900, 700);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

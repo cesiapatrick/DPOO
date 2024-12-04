@@ -89,7 +89,6 @@ public class HospitalData implements Serializable {
     
     public void actualizarArrayClases() {
     	
-    	VacunacionController.getInstance().setVacunaciones(vacunaciones);
 	}
     
     //Vacunas
