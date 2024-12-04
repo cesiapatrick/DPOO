@@ -88,7 +88,7 @@ public class HospitalData implements Serializable {
     }
     
     public void actualizarArrayClases() {
-    	ConsultaController.getInstance().setConsultas(consultasMedicas);
+    	
     	EnfermedadController.getInstance().setEnfermedades(enfermedades);
     	//HistoriaClinicaController.getInstance().setHistoriaClinica(historiasClinicas);
     	PacienteController.getInstance().setPacientes(pacientes);

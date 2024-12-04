@@ -3,7 +3,6 @@ package views;
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
-import controllers.ConsultaController;
 import controllers.HospitalData;
 import models.ConsultaMedica;
 import models.Paciente;
@@ -25,7 +24,6 @@ public class ConsultaView extends JFrame {
 	private JTextField txtPacienteEncontrado;
 	private JTextField txtDoctorEncontrado;
 	private JDateChooser dateChooser;
-	private ConsultaController consultaController = ConsultaController.getInstance();
 	private Paciente pacienteEncontrado = null;
 	private Doctor doctorEncontrado = null;
 	private ConsultaMedica consultaMedica = null;
@@ -334,7 +332,7 @@ public class ConsultaView extends JFrame {
 
 				consultaMedica = new ConsultaMedica (fechaConsulta, diagnostico, tratamiento, doctor, paciente);
 				hospitalData.addConsulta(consultaMedica);
-				consultaController.registrarConsulta(consultaMedica);
+				
 
 				JOptionPane.showMessageDialog(null, "✅ Consulta registrada exitosamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 				txtDiagnostico.setText("");
