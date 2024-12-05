@@ -48,6 +48,12 @@ public class Doctor implements Serializable {
 	public void setEspecialidad(String especialidad) {
 		this.especialidad = especialidad;
 	}
+	
+	public void actualizarParametros(String nombre, String apellido, String especialidad) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.especialidad = especialidad;
+    }
 
 
 	@Override

@@ -93,4 +93,16 @@ public class Paciente implements Serializable {
     public String toString() {
         return nombre + " (Cedula: " + cedula + ")";
     }
+	
+	public void actualizarParametros(String cedula, String nombre, String apellido, int edad, String tipoSangre, String genero) {
+    	this.nombre = nombre;
+    	this.apellido = apellido;
+        this.edad = edad;
+        this.tipoSangre = tipoSangre;
+        this.genero = genero;
+        this.cedula = cedula;
+        this.vivienda = vivienda;
+    }
+	
+	
 }

@@ -167,6 +167,10 @@ public class HospitalData implements Serializable {
 	public void addConsulta(ConsultaMedica consultaMedica) {
         consultasMedicas.add(consultaMedica);
     }
+	
+    public void eliminarConsulta(ConsultaMedica consulta) {
+    	consultasMedicas.remove(consulta);
+    }
 
 	//Doctores
     public ArrayList<Doctor> getDoctores() {
@@ -191,6 +195,10 @@ public class HospitalData implements Serializable {
     	return null;
     }
     
+    public void eliminarDoctor(Doctor doctor) {
+    	doctores.remove(doctor);
+    }
+    
     //Pacientes
     public ArrayList<Paciente> getPacientes() {
         return pacientes;
@@ -212,6 +220,10 @@ public class HospitalData implements Serializable {
     		}
     	}
     	return null;
+    }
+    
+    public void eliminarPaciente(Paciente paciente) {
+    	pacientes.remove(paciente);
     }
     
     //Usuarios

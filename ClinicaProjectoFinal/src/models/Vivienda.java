@@ -48,5 +48,12 @@ public class Vivienda implements Serializable{
 	public void setCodigoPostal(String codigoPostal) {
 		this.codigoPostal = codigoPostal;
 	}
+	
+	public void actualizarParametros(String direccion, String ciudad, String tipo, String codigoPostal) {
+        this.direccion = direccion;
+        this.ciudad = ciudad;
+        this.tipo = tipo;
+        this.codigoPostal = codigoPostal;
+    }
     
 }

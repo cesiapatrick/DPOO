@@ -164,13 +164,13 @@ public class MainView extends JFrame {
 
         
         String[][] menuItems = {
-            //{" Registro de Viviendas", "vivienda"},
             {" Registro de Pacientes", "paciente"},
             {" Crear Doctor", "doctor"},
             {" Gestión de Consultas", "consulta"},
             {" Control de Enfermedades", "enfermedad"},
             {" Control de Vacunación", "vacunacion"},
             {" Historias Clínicas", "historia"},
+            {" Ver / Modificar", "modificar"},
             {" Generar Reporte", "reporte"},
             {" Exportar Datos", "exportar"},
             {" Importar Datos", "importar"}
@@ -274,8 +274,8 @@ public class MainView extends JFrame {
 
     private void handleButtonClick(String buttonName) {
         switch (buttonName) {
-            case "vivienda":
-                //new ViviendaView(null).setVisible(true);
+            case "modificar":
+                new VerModificarView().setVisible(true);
                 break;
             case "paciente":
                 new PacienteView().setVisible(true);
@@ -310,14 +310,6 @@ public class MainView extends JFrame {
     private void generarReporte() {
         StringBuilder reporte = new StringBuilder();
         reporte.append("===== Reporte del Sistema de Gestión de Clínica Médica =====\n\n");
-        
-        /*
-        // Viviendas
-        reporte.append("Viviendas:\n");
-        for (Vivienda vivienda : viviendaController.listarViviendas()) {
-            reporte.append("- ").append(vivienda.getDireccion()).append(", ").append(vivienda.getCiudad()).append(", ").append(vivienda.getCodigoPostal()).append("\n");
-        }
-        */
 
         // Pacientes
         reporte.append("\nPacientes:\n");
@@ -346,6 +338,18 @@ public class MainView extends JFrame {
         JOptionPane.showMessageDialog(this, reporte.toString(), "Reporte del Sistema", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        SwingUtilities.invokeLater(() -> {
+            new MainView().setVisible(true);
+        });
+    }
+    
     private void exportarDatos() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Guardar Datos");
@@ -377,18 +381,6 @@ public class MainView extends JFrame {
                 "Importación Exitosa",
                 JOptionPane.INFORMATION_MESSAGE);
         }
-    }
-
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-        SwingUtilities.invokeLater(() -> {
-            new MainView().setVisible(true);
-        });
     }
     
     
