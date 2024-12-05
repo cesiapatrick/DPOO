@@ -162,22 +162,40 @@ public class MainView extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 0, 5, 0);
         
-        String[][] menuItems = {
-            {" Registro de Pacientes", "paciente"},
-            {" Crear Doctor", "doctor"},
-            {" Gestión de Consultas", "consulta"},
-            {" Control de Enfermedades", "enfermedad"},
-            {" Control de Vacunación", "vacunacion"},
-            {" Historias Clínicas", "historia"},
-            {" Ver / Modificar", "modificar"},
-            {" Generar Reporte", "reporte"},
-            {" Exportar Datos", "exportar"},
-            {" Importar Datos", "importar"}
-        };
-
-        for (String[] item : menuItems) {
-            panel.add(createMenuButton(item[0], item[1]), gbc);
+        if(hospitalData.getUsuarioActivo().equalsIgnoreCase("Doctor")) {
+        	String[][] menuItems = {
+                    //{" Registro de Pacientes", "paciente"},
+                    //{" Crear Doctor", "doctor"},
+                    {" Gestión de Consultas", "consulta"},
+                    {" Control de Enfermedades", "enfermedad"},
+                    {" Control de Vacunación", "vacunacion"},
+                    {" Historias Clínicas", "historia"},
+                    {" Ver / Modificar", "modificar"},
+                    //{" Generar Reporte", "reporte"},
+                    //{" Exportar Datos", "exportar"},
+                    //{" Importar Datos", "importar"}
+                };
+        	for (String[] item : menuItems) {
+                panel.add(createMenuButton(item[0], item[1]), gbc);
+            }
+        } else {
+        	String[][] menuItems = {
+                    {" Registro de Pacientes", "paciente"},
+                    {" Crear Doctor", "doctor"},
+                    {" Gestión de Consultas", "consulta"},
+                    {" Control de Enfermedades", "enfermedad"},
+                    {" Control de Vacunación", "vacunacion"},
+                    {" Historias Clínicas", "historia"},
+                    {" Ver / Modificar", "modificar"},
+                    {" Generar Reporte", "reporte"},
+                    {" Exportar Datos", "exportar"},
+                    {" Importar Datos", "importar"}
+                };
+        	for (String[] item : menuItems) {
+                panel.add(createMenuButton(item[0], item[1]), gbc);
+            }
         }
+        
 
         return panel;
     }

@@ -290,14 +290,12 @@ public class VerModificarView extends JFrame {
             DefaultTableModel model = (DefaultTableModel) pacienteTable.getModel();
             Paciente paciente = hospitalData.getPacientes().get(selectedRow);
             new PacienteView(paciente).setVisible(true);
-            dispose();
             
         } else if (doctorTable.getSelectedRow() != -1) {
             selectedRow = doctorTable.getSelectedRow();
             DefaultTableModel model = (DefaultTableModel) doctorTable.getModel();
             Doctor doctor = hospitalData.getDoctores().get(selectedRow);
             new CrearDoctorView(doctor).setVisible(true);
-            dispose();
             
             
         } else if (consultaTable.getSelectedRow() != -1) {
@@ -305,7 +303,6 @@ public class VerModificarView extends JFrame {
             DefaultTableModel model = (DefaultTableModel) consultaTable.getModel();
             ConsultaMedica consulta = hospitalData.getConsultasMedicas().get(selectedRow);
             new ConsultaView(consulta).setVisible(true);
-            dispose();
         }
     }
 
