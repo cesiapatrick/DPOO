@@ -167,6 +167,7 @@ public class AdminLoginView extends JFrame {
                     if (username.equals(ADMIN_USERNAME) && password.equals(ADMIN_PASSWORD)) {
                         JOptionPane.showMessageDialog(null, " Inicio de sesión de administrador exitoso");
                         new MainView().setVisible(true);
+                        hospitalData.setUsuarioActivo("Administrador");
                         dispose();
                     } else {
                         JOptionPane.showMessageDialog(null, " Credenciales de administrador incorrectas", 
@@ -176,6 +177,7 @@ public class AdminLoginView extends JFrame {
                     if (hospitalData.autenticarInicioSesion(username, password)) {
                         JOptionPane.showMessageDialog(null, " Inicio de sesión de doctor exitoso");
                         new MainView().setVisible(true);
+                        hospitalData.setUsuarioActivo("Doctor");
                         dispose();
                     } else {
                         JOptionPane.showMessageDialog(null, " Credenciales de doctor incorrectas", 
@@ -206,6 +208,7 @@ public class AdminLoginView extends JFrame {
                         
                         usuario = new Usuario(username, password, tipo);
                         hospitalData.addUsuario(usuario);
+                        hospitalData.setUsuarioActivo("Doctor");
                         
                         new MainView().setVisible(true);
                         dispose();

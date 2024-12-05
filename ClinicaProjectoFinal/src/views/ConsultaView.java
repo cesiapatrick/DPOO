@@ -658,12 +658,10 @@ public class ConsultaView extends JFrame {
         			return;
         		}
 				
-
-				consultaMedica = new ConsultaMedica (fechaConsulta, diagnostico, tratamiento, doctor, paciente);
-				hospitalData.addConsulta(consultaMedica);
+				consultaModi.actualizarParametros(fechaConsulta, diagnostico, tratamiento, doctor, paciente);
 				
 
-				JOptionPane.showMessageDialog(null, "✅ Consulta registrada exitosamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "✅ Consulta Modificada exitosamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 				txtDiagnostico.setText("");
 				txtTratamiento.setText("");
 				dateChooser.setDate(new Date());

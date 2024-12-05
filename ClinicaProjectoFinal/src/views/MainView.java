@@ -161,7 +161,6 @@ public class MainView extends JFrame {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 0, 5, 0);
-
         
         String[][] menuItems = {
             {" Registro de Pacientes", "paciente"},

@@ -59,4 +59,14 @@ public class ConsultaMedica implements Serializable {
 	public void setDoctor(Doctor doctor) {
 		this.doctor = doctor;
 	}
+	
+	public void actualizarParametros(Date fecha, String diagnostico, String tratamiento, Doctor doctor, Paciente paciente) {
+        this.fecha = fecha;
+        this.diagnostico = diagnostico;
+        this.tratamiento = tratamiento;
+        this.doctor = doctor;
+        this.paciente = paciente;
+    }
+	
+	
 }
